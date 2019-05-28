@@ -1,5 +1,5 @@
 import argparse
-import librosa
+import librosa 
 import numpy as np
 
 parser = argparse.ArgumentParser(description='Tensorflow Implementation of WaveGlow')
