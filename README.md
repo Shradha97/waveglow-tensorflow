@@ -10,6 +10,7 @@ We also need:
  - [tqdm](https://github.com/tqdm/tqdm)
  - [librosa](https://github.com/librosa/librosa)
  - [cuda-10.0](https://developer.nvidia.com/cuda-10.0-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=runfilelocal)
+ - [cuDNN-compatible version for cuda-10.0](https://developer.nvidia.com/rdp/form/cudnn-download-survey)
 
 You can also setup the environment by the Dockerfile in the repository.
 Navigate to the directory where Dockerfile is present and then in terminal, type:
