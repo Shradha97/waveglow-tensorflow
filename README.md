@@ -3,7 +3,7 @@ This is a Tensorflow-nightly-2.0 implementation of [NVIDIA/waveglow](https://git
 Now some samples at step 592k are at */step_592k_samples*.
 
 ## Setup
-First we need python3 along with [Tensorflow](https://github.com/tensorflow/tensorflow) with gpu support, the version this repository use is **r1.12**.
+First we need python3 along with [Tensorflow](https://github.com/tensorflow/tensorflow) with tensorflow-nightly-gpu support, the version this repository use is **r2.0.0**.
 Other versions may also work, but I'm not sure which version will have error.
 
 We also need:
@@ -11,8 +11,8 @@ We also need:
  - [librosa](https://github.com/librosa/librosa)
 
 You can also setup the environment by the Dockerfile in the repository.
-However, I build the tensorflow r1.12 from source to specify the cuda version to be 9.2, thus it may take much more time to setup the docker image.
-> docker build -t {IMAGE\_NAME\_YOU\_LIKE} .
+Navigate to the directory where Dockerfile is present and then in terminal, type:
+> docker build - < Dockerfile
 
 ## Dataset Preparation
 For getting the dataset prepared, first **adjust the Input Path section of src/hparams.py** to our dataset path, then run:
