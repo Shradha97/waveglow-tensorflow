@@ -3,7 +3,8 @@ This is a Tensorflow-nightly-2.0 implementation of [NVIDIA/waveglow](https://git
 Now some samples at step 592k are at */step_592k_samples*.
 
 ## Setup
-First we need python3 along with [Tensorflow](https://github.com/tensorflow/tensorflow) with tensorflow-nightly-gpu support, the version this repository use is **r2.0.0**. If working on personal system, the software must have additional drivers configured to Using NVIDIA driver metapackage from nvidia-driver-418(open source)
+First we need python3 along with [Tensorflow](https://github.com/tensorflow/tensorflow) with tensorflow-nightly-gpu support, the version this repository use is **r2.0.0**. If working on personal system, the software must have additional drivers configured to Using NVIDIA driver metapackage from nvidia-driver-418(open source).
+
 Other versions may also work, but I'm not sure which version will have error.
 
 We also need:
