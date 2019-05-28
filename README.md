@@ -1,5 +1,5 @@
 # WAVEGLOW
-This is a tensorflow implementation of [NVIDIA/waveglow](https://github.com/NVIDIA/waveglow).
+This is a Tensorflow-nightly-2.0 implementation of [NVIDIA/waveglow](https://github.com/NVIDIA/waveglow).
 Now some samples at step 592k are at */step_592k_samples*.
 
 ## Setup
@@ -58,6 +58,7 @@ The configurations, hyperparams and descriptions are in *src/hparams.py*
  - Multiprocess Dataset Preparation
 
 ## References
+ - [waveglow-tensorflow](https://github.com/b04901014/waveglow-tensorflow)
  - [NVIDIA/waveglow](https://github.com/NVIDIA/waveglow)
  - [openai/glow](https://github.com/openai/glow)
  - [tensorflow/docker](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/docker/Dockerfile.gpu)
