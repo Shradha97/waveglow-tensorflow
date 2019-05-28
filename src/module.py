@@ -1,5 +1,5 @@
 import tensorflow as tf
-from ops import *
+from ops import * 
 from hparams import args
 
 def wavenet(inputs, mels, weight_norm=False, scope=None, reuse=None):
