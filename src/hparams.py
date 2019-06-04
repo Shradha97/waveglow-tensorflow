@@ -1,27 +1,27 @@
 import argparse
-import librosa 
+import librosa
 import numpy as np
 
-parser = argparse.ArgumentParser(description='Tensorflow Implementation of WaveGlow')
+parser = argparse.ArgumentParser(description='Tensorflow-nightly Implementation of WaveGlow')
 
 ##Training Parameters##
 #Sizes
-parser.add_argument('--batch_size', dest='batch_size', type=int, default=4, help='Batch Size')
-parser.add_argument('--mel_time_step', dest='mel_time_step', type=int, default=64, help='Time Step of Inputs')
+parser.add_argument('--batch_size', dest='batch_size', type=int, default=1, help='Batch Size')
+parser.add_argument('--mel_time_step', dest='mel_time_step', type=int, default=32, help='Time Step of Inputs')
 #Optimizer
 parser.add_argument('--lr', dest='lr', type=float, default=1e-4, help='Initial Learning Rate')
 parser.add_argument('--lr_decay_rate', dest='lr_decay_rate', type=float, default=0.5, help='Decay rate of exponential learning rate decay')
-parser.add_argument('--lr_decay_steps', dest='lr_decay_steps', type=int, default=300000, help='Decay steps of exponential learning rate decay')
+parser.add_argument('--lr_decay_steps', dest='lr_decay_steps', type=int, default=250000, help='Decay steps of exponential learning rate decay')
 #Epoch Settings
-parser.add_argument('--epoch', dest='epoch', type=int, default=500, help='Number of Epochs')
-parser.add_argument('--display_step', dest='display_step', type=int, default=100, help='Batch to Output Training Details')
+parser.add_argument('--epoch', dest='epoch', type=int, default=20, help='Number of Epochs')
+parser.add_argument('--display_step', dest='display_step', type=int, default=2, help='Batch to Output Training Details')
 parser.add_argument('--saving_epoch', dest='saving_epoch', type=int, default=2, help='Epoch to Save Model')
 parser.add_argument('--sample_epoch', dest='sample_epoch', type=int, default=1, help='Epoch to Sample')
-parser.add_argument('--sample_num', dest='sample_num', type=int, default=5, help='Number of Audios per Sample')
+parser.add_argument('--sample_num', dest='sample_num', type=int, default=4, help='Number of Audios per Sample')
 parser.add_argument('--valsplit', dest='valsplit', type=float, default=0.9, help='Portion for training examples, others for validation')
 parser.add_argument('--num_proc', dest='num_proc', type=int, default=None, help='Number of process to spawn for data loader')
 #GPU
-parser.add_argument('--gpu_fraction', dest='gpu_fraction', type=float, default=0.85, help='Fraction of GPU Memory to use')
+parser.add_argument('--gpu_fraction', dest='gpu_fraction', type=float, default=0.95, help='Fraction of GPU Memory to use')
 #parser.add_argument('--use_fp16', dest='use_fp16', default=False, action='store_false', help='True if use float16 for tensorcore acceleration')
 #parser.add_argument('--fp16_scale', dest='fp16_scale', type=float, default=128, help='Scaling factor for fp16 computation')
 #Normalization
@@ -34,7 +34,7 @@ parser.add_argument('--infer_path', dest='infer_path', default='./waveglow/infer
 
 ##Sampling##
 parser.add_argument('--truncate_sample', dest='truncate_sample', default=False, action='store_true', help='Truncate the infer input mels to truncate_step due to GPU memory consideration or not')
-parser.add_argument('--truncate_step', dest='truncate_step', type=float, default=384, help='Truncate the infer input mels to truncate_step due to GPU memory consideration')
+parser.add_argument('--truncate_step', dest='truncate_step', type=float, default=240, help='Truncate the infer input mels to truncate_step due to GPU memory consideration')
 
 ##Input Path##
 parser.add_argument('--metadata_dir', dest='metadata_dir', default='./LJSpeech-1.1/metadata.csv', help='Path to metadata.csv')
@@ -50,36 +50,36 @@ parser.add_argument('--summary_dir', dest='summary_dir', default='./summary', he
 
 ##Audio Processing Params##
 #STFT
-parser.add_argument('--num_freq', dest='num_freq', type=int, default=513, help='Number of frequency bins for STFT')
-parser.add_argument('--hop_length', dest='hop_length', type=int, default=256, help='Hop length for STFT')
-parser.add_argument('--window_size', dest='window_size', type=int, default=1024, help='Window size for STFT')
+parser.add_argument('--num_freq', dest='num_freq', type=int, default=400, help='Number of frequency bins for STFT') #Changed num_freq to 504 from 513
+parser.add_argument('--hop_length', dest='hop_length', type=int, default=32, help='Hop length for STFT')
+parser.add_argument('--window_size', dest='window_size', type=int, default=128, help='Window size for STFT')  #Changed window size to 256 from 1024
 #Mels
-parser.add_argument('--n_mel', dest='n_mel', type=int, default=80, help='Channel Size of Inputs')
+parser.add_argument('--n_mel', dest='n_mel', type=int, default=10, help='Channel Size of Inputs')
 parser.add_argument('--fmin', dest='fmin', type=int, default=0, help='Minimum Frequency of Mel Banks')
 parser.add_argument('--fmax', dest='fmax', type=int, default=7600, help='Maximum Frequency of Mel Banks')
 #Silence
-parser.add_argument('--trim_hop_length', dest='trim_hop_length', type=int, default=256, help='Hop length for trimming silence')
-parser.add_argument('--trim_window_size', dest='trim_window_size', type=int, default=1024, help='Window size for trimming silence')
+parser.add_argument('--trim_hop_length', dest='trim_hop_length', type=int, default=32, help='Hop length for trimming silence')
+parser.add_argument('--trim_window_size', dest='trim_window_size', type=int, default=128, help='Window size for trimming silence')
 parser.add_argument('--trim_inner_scilence', dest='trim_inner_scilence', default=False, action='store_true', help='Specify to trim the inner slience')
 #Preprocessing
-parser.add_argument('--sample_rate', dest='sample_rate', type=int, default=22050, help='Sample Rate of Input Audios')
+parser.add_argument('--sample_rate', dest='sample_rate', type=int, default=18000, help='Sample Rate of Input Audios')
 parser.add_argument('--trim_top_db', dest='trim_top_db', type=float, default=10, help='Top dB for trimming scilence')
 parser.add_argument('--clip_to_value', dest='clip_to_value', type=float, default=4.0, help='Max/Min value of mel spectrogram')
 parser.add_argument('--ref_db', dest='ref_db', type=float, default=45, help='Value to subtract to normalize mel spectrogram')
 parser.add_argument('--scale_db', dest='scale_db', type=float, default=15, help='Value to divide to normalize mel spectrogram')
 
 ##Flow Network##
-parser.add_argument('--n_flows', dest='n_flows', type=int, default=12, help='Number of flow layers in network')
-parser.add_argument('--squeeze_size', dest='squeeze_size', type=int, default=8, help='Number of channels of input wavs')
+parser.add_argument('--n_flows', dest='n_flows', type=int, default=8, help='Number of flow layers in network')
+parser.add_argument('--squeeze_size', dest='squeeze_size', type=int, default=4, help='Number of channels of input wavs')
 parser.add_argument('--early_output_size', dest='early_output_size', type=int, default=2, help='Number of channels per early output')
 parser.add_argument('--early_output_every', dest='early_output_every', type=int, default=4, help='Number of flows per early output')
 parser.add_argument('--sigma', dest='sigma', type=float, default=1.0, help='Stddev for the gaussian prior during training')
 parser.add_argument('--infer_sigma', dest='infer_sigma', type=float, default=0.6, help='Stddev for the gaussian prior during inference')
 
 ##WaveNet##
-parser.add_argument('--wavnet_channels', dest='wavnet_channels', type=int, default=512, help='Number of WaveNet channels')
-parser.add_argument('--wavenet_layers', dest='wavenet_layers', type=int, default=8, help='Number of layers of WaveNet')
-parser.add_argument('--wavenet_filter_size', dest='wavenet_filter_size', type=int, default=3, help='Filter length of WaveNet')
+parser.add_argument('--wavnet_channels', dest='wavnet_channels', type=int, default=64, help='Number of WaveNet channels')
+parser.add_argument('--wavenet_layers', dest='wavenet_layers', type=int, default=4, help='Number of layers of WaveNet')
+parser.add_argument('--wavenet_filter_size', dest='wavenet_filter_size', type=int, default=2, help='Filter length of WaveNet')
 
 
 args = parser.parse_args()
