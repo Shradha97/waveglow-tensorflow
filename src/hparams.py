@@ -54,7 +54,7 @@ parser.add_argument('--num_freq', dest='num_freq', type=int, default=400, help='
 parser.add_argument('--hop_length', dest='hop_length', type=int, default=32, help='Hop length for STFT')
 parser.add_argument('--window_size', dest='window_size', type=int, default=128, help='Window size for STFT')  #Changed window size to 256 from 1024
 #Mels
-parser.add_argument('--n_mel', dest='n_mel', type=int, default=10, help='Channel Size of Inputs')
+parser.add_argument('--n_mel', dest='n_mel', type=int, default=80, help='Channel Size of Inputs')
 parser.add_argument('--fmin', dest='fmin', type=int, default=0, help='Minimum Frequency of Mel Banks')
 parser.add_argument('--fmax', dest='fmax', type=int, default=7600, help='Maximum Frequency of Mel Banks')
 #Silence
